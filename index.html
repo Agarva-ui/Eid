@@ -171,31 +171,25 @@
 
     <div class="container">
         <div class="box-container">
-            <div class="box" data-probability="5">20dl</div>
+            <div class="box" data-probability="2">20dl</div>
         </div>
         <div class="box-container">
             <div class="box" data-probability="1">1bgl</div>
         </div>
         <div class="box-container">
-            <div class="box" data-probability="44">1dl</div>
-        
+            <div class="box" data-probability="50">1dl</div>
         </div>
         <div class="box-container">
-            <div class="box" data-probability="20">5dl</div>
-           
+            <div class="box" data-probability="30">5dl</div>
         </div>
         <div class="box-container">
-            <div class="box" data-probability="10">5% من الطلب</div>
-            
-           
+            <div class="box" data-probability="5">5% من الطلب</div>
         </div>
         <div class="box-container">
-            <div class="box" data-probability="20">5dl</div>
-     
+            <div class="box" data-probability="30">5dl</div>
         </div>
     </div>
     <button id="pullButton" disabled>Pull</button>
-    <div id="counter">Remaining pulls: 1</div>
     <div id="prizeHistory"></div>
 
     <div id="congratsModal" class="modal">
@@ -209,7 +203,6 @@
     <script>
         const boxes = document.querySelectorAll('.box');
         const pullButton = document.getElementById('pullButton');
-        const counter = document.getElementById('counter');
         const modal = document.getElementById('congratsModal');
         const prizeMessage = document.getElementById('prizeMessage');
         const closeBtn = document.querySelector('.close');
@@ -219,13 +212,9 @@
         const usernameDisplay = document.getElementById('usernameDisplay');
         
         // Get initial state from localStorage
-        let remainingPulls = parseInt(localStorage.getItem('remainingPulls')) || 1;
         let hasPlayed = localStorage.getItem('hasPlayed') === 'true';
         let lastPrize = localStorage.getItem('lastPrize');
         let username = localStorage.getItem('username');
-
-        // Update counter display
-        counter.textContent = `Remaining pulls: ${remainingPulls}`;
 
         // Google Apps Script URL
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyXLmwDAsBTew80RSUxT4-QtG2pySE9jrCapvRfIPOHz_bBAGqho05b8NOJFax2Lwdc/exec';
@@ -233,7 +222,7 @@
         // Initialize username display and button state
         if (username) {
             usernameDisplay.textContent = `Current username: ${username}`;
-            pullButton.disabled = hasPlayed || remainingPulls <= 0;
+            pullButton.disabled = false;
         }
 
         // Set username button click handler
@@ -243,7 +232,7 @@
                 username = newUsername;
                 localStorage.setItem('username', username);
                 usernameDisplay.textContent = `Current username: ${username}`;
-                pullButton.disabled = hasPlayed || remainingPulls <= 0;
+                pullButton.disabled = false;
                 usernameInput.value = '';
                 // Disable username input and button after setting username
                 usernameInput.disabled = true;
@@ -267,18 +256,6 @@
         // Prevent keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.shiftKey || e.altKey) {
-                e.preventDefault();
-            }
-        });
-
-        // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        document.addEventListener('keydown', (e) => {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-                (e.ctrlKey && e.key === 'u')
-            ) {
                 e.preventDefault();
             }
         });
@@ -315,7 +292,6 @@
             // Save to localStorage
             localStorage.setItem('hasPlayed', 'true');
             localStorage.setItem('lastPrize', prize);
-            localStorage.setItem('remainingPulls', remainingPulls);
 
             // Send to Google Sheets
             sendToGoogleSheets(username, prize);
@@ -332,11 +308,6 @@
         }
 
         pullButton.addEventListener('click', () => {
-            if (remainingPulls <= 0 || hasPlayed) {
-                pullButton.disabled = true;
-                return;
-            }
-
             // Reset all boxes
             boxes.forEach(box => box.classList.remove('winner'));
 
@@ -363,14 +334,7 @@
                 selectedBox.classList.add('winner');
                 showPrize(selectedBox.textContent);
             }
-
-            remainingPulls--;
-            counter.textContent = `Remaining pulls: ${remainingPulls}`;
-            pullButton.disabled = true; // Disable after one pull
         });
-
-        // Prevent form submission
-        document.addEventListener('submit', (e) => e.preventDefault());
     </script>
 </body>
 </html>
