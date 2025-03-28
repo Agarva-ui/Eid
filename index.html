@@ -223,6 +223,9 @@
         if (username) {
             usernameDisplay.textContent = `Current username: ${username}`;
             pullButton.disabled = false;
+            // Disable username input and button if username exists
+            usernameInput.disabled = true;
+            setUsernameBtn.disabled = true;
         }
 
         // Set username button click handler
