@@ -245,6 +245,9 @@
                 usernameDisplay.textContent = `Current username: ${username}`;
                 pullButton.disabled = hasPlayed || remainingPulls <= 0;
                 usernameInput.value = '';
+                // Disable username input and button after setting username
+                usernameInput.disabled = true;
+                setUsernameBtn.disabled = true;
             } else {
                 alert('Please enter a username');
             }
