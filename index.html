@@ -35,8 +35,14 @@
             height: 150px;
             background-color: #0008e9;
             background-image: url("Bgl.jpeg");
+            background-size: cover;
             color: white;
-            text-shadow: 3px 3px 8px rgba(0, 0, 0, 1);
+            font-weight: bold;
+            text-shadow: 
+        -1px -1px 0 black,  
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black; /* Creates a black outline */
             border: 2px solid #333;
             display: flex;
             align-items: center;
@@ -177,7 +183,7 @@
             <div class="box" data-probability="1">1bgl</div>
         </div>
         <div class="box-container">
-            <div class="box" data-probability="50">1dl</div>
+            <div class="box" data-probability="50">3dl</div>
         </div>
         <div class="box-container">
             <div class="box" data-probability="30">5dl</div>
